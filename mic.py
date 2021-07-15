@@ -25,8 +25,6 @@ frames = []
 while(True):
     data = stream.read(CHUNK)
     stream2.write(data)
-    # stream.write(data)
-    # frames.append(data)
 print
 "finished recording"
 
