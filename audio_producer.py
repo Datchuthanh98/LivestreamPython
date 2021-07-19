@@ -13,7 +13,7 @@ audio = pyaudio.PyAudio()
 FORMAT = pyaudio.paInt16
 CHANNELS = 2
 RATE = 44100
-CHUNK = 1024
+CHUNK = 10240 *3
 RECORD_SECONDS = 20
 
 class Producer(threading.Thread):
@@ -27,9 +27,10 @@ class Producer(threading.Thread):
                 wf = wave.open("testt"+".wav", "rb")
                 data = wf.readframes(CHUNK)
                 while len(data) > 0:
-                 print("sending dataa")
+                 print(position)
 
                  producer.send('test-events', {
+                     "position":position,
                      "data": data.decode('latin-1'),
                      "format":audio.get_format_from_width(wf.getsampwidth()),
                      "channels": wf.getnchannels(),
@@ -37,6 +38,7 @@ class Producer(threading.Thread):
 
                  data = wf.readframes(CHUNK)
                  position += 1
+                 # time.sleep(1)
 
 def main():
     threads = [
