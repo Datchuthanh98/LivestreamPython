@@ -38,7 +38,7 @@ class Producer(threading.Thread):
 
                  data = wf.readframes(CHUNK)
                  position += 1
-                 # time.sleep(1)
+                 time.sleep(1./10)
 
 def main():
     threads = [

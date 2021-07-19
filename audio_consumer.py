@@ -14,12 +14,13 @@ CHUNK = 10240
 # instantiate PyAudio (1)
 audio = pyaudio.PyAudio()
 myArray = MyCustomeArray();
+
 # open stream (2)
 
 class Consumer(threading.Thread):
     daemon = True
     def run(self):
-        stream = None
+
         consumer = KafkaConsumer(bootstrap_servers='192.168.75.128:6667',
                                  auto_offset_reset='latest',
                                  consumer_timeout_ms=1000,
@@ -34,10 +35,19 @@ class Consumer(threading.Thread):
             data_bytes = message.value["data"].encode("latin-1","strict")
             data_position = int(message.value["position"])
             data_model = DataModel(data_bytes,data_format,data_channels,data_rate,data_position)
-
             myArray.add(data_model)
-            take_model = myArray.take()
 
+            # stream.stop_stream()
+            # stream.close()
+            # audio.terminate()
+
+class PlayAudio(threading.Thread):
+    daemon = True
+    def run(self):
+        time.sleep(3)
+        stream = None
+        while True:
+            take_model = myArray.take()
             if stream == None:
                 if take_model != None:
                     stream = audio.open(
@@ -50,16 +60,14 @@ class Consumer(threading.Thread):
                 print(take_model.position)
                 stream.write(take_model.bytes)
             else:
-                 print("get pkg none")
-            # time.sleep(1./100)
+                print("get pkg none")
 
-            # stream.stop_stream()
-            # stream.close()
-            # audio.terminate()
+
 
 def main():
     threads = [
         Consumer(),
+        PlayAudio()
     ]
     for t in threads:
         t.start()
