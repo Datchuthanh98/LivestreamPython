@@ -20,7 +20,7 @@ class Producer(threading.Thread):
     daemon = True
     def run(self):
         position = 0
-        producer = KafkaProducer(bootstrap_servers='192.168.75.128:6667',
+        producer = KafkaProducer(bootstrap_servers='192.168.41.131:6667',
                                  value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
         while True:

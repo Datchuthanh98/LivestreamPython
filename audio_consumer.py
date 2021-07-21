@@ -21,7 +21,7 @@ class Consumer(threading.Thread):
     daemon = True
     def run(self):
 
-        consumer = KafkaConsumer(bootstrap_servers='192.168.75.128:6667',
+        consumer = KafkaConsumer(bootstrap_servers='192.168.41.131:6667',
                                  auto_offset_reset='latest',
                                  consumer_timeout_ms=1000,
                                  value_deserializer=lambda m: json.loads(m.decode('utf-8')))
